@@ -239,23 +239,26 @@ export const ChatProvider = ({ children }) => {
   const sendMessage = async (friendAddr) => {
     try {
       console.log("Send Message to Friends");
+      let input = document.querySelector('#input-field');
       const { ethereum } = window;
-        if (ethereum) {
-          const provider = new ethers.providers.Web3Provider(ethereum);
-          const signer = provider.getSigner();
-          const chatContract = new ethers.Contract(
-            ChatContractAddress,
-            ChatAbi.abi,
-            signer
-          );
-  
-          // Add friend to the current user.
-          await chatContract.sendMessage(selectedAddr, messageInput);
-          //clear input text area
-          input.value ='';
-        } else {
-          //don't clear input text area
-          alert("Please connect to MetaMask");
+        if(input.value) {
+          if (ethereum) {
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const signer = provider.getSigner();
+            const chatContract = new ethers.Contract(
+              ChatContractAddress,
+              ChatAbi.abi,
+              signer
+            );
+    
+            // Add friend to the current user.
+            await chatContract.sendMessage(selectedAddr, messageInput);
+            //clear input text area
+            input.value ='';
+          } else {
+            //don't clear input text area
+            alert("Please connect to MetaMask");
+          }
         }
     } catch (error) {
       console.log("Error: ", error);
